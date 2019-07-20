@@ -1,0 +1,617 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<!-- Required meta tags -->
+
+<meta charset="utf-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Admin</title>
+<!-- plugins:css -->
+<link rel="stylesheet" href="css/materialdesignicons.min.css">
+<link rel="stylesheet" href="css/vendor.bundle.base.css">
+<!-- endinject -->
+<!-- plugin css for this page -->
+<!-- End plugin css for this page -->
+<!-- inject:css -->
+<link rel="stylesheet" href="css/style.css">
+<!-- endinject -->
+<link rel="shortcut icon" href="images/favicon.png" />
+<style type="text/css">
+body {
+	font-family: Arial;
+	font-size: 10pt;
+}
+table
+        {
+            border: 1px solid #ccc;
+            border-collapse: collapse;
+        }
+        table th
+        {
+            background-color: #F7F7F7;
+            color: #333;
+            font-weight: bold;
+        }
+        table th, table td
+        {
+            padding: 5px;
+            border-color: #ccc;
+        }
+</style>
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function() 
+	{
+		$("#financialYear").change(function() 
+		{
+			if ($(this).val() == "Y") {
+				$("#dvFinancialYear").show();
+			} else {
+				$("#dvFinancialYear").hide();
+			}
+		});
+
+		$(".custom-file-input").on("change", function() 
+		{
+			var fileName = $(this).val().split("\\").pop();
+			$(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+		});
+		
+	});
+	
+</script>
+
+   
+</head>
+
+<body><script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">
+	function addRow(tableID) {
+		var table = document.getElementById(tableID);
+           	var rowCount = table.rows.length;
+           	var row = table.insertRow(rowCount);
+           	
+            var element1 = document.createElement("input");
+            var element2 = document.createElement("input");
+            var element3 = document.createElement("input");
+            var element4 = document.createElement("input");
+            var element5 = document.createElement("input");
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+
+            
+           	element1.type = "checkbox";
+            element1.name="chkbox[]"; 
+            element2.type = "text";
+			element3.type = "date";
+            element4.type = "text";
+			element5.type = "file";
+
+			
+			
+            
+			
+			//cell1.innerHTML = rowCount + 1;
+			var length=(table.rows.length)-1;
+			
+			cell1.appendChild(element1); 
+			
+            element2.name = "operationParameterses["+length+"].billNumber";
+            cell2.appendChild(element2);
+            
+          	element3.name = "operationParameterses["+length+"].billDate";
+            cell3.appendChild(element3);
+            
+            element4.name= "operationParameterses["+length+"].billAmt";
+            cell4.appendChild(element4);
+            
+            element5.name = "operationParameterses["+length+"].file";
+            cell5.appendChild(element5); 
+
+        }
+
+        function deleteRow(tableID) {
+            try {
+            var table = document.getElementById(tableID);
+            var rowCount = table.rows.length;
+
+            for(var i=0; i<rowCount; i++) {
+                var row = table.rows[i];
+                var chkbox = row.cells[0].childNodes[0];
+                if(null != chkbox && true == chkbox.checked) {
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                }
+            }
+            }catch(e) {
+                alert(e);
+            }
+        }
+        $(function () {
+            //Build an array containing Customer records.
+            var billing = new Array();
+            
+
+            //Add the data rows.
+            for (var i = 0; i < billing.length; i++) {
+                addRow(billing[i][0], billing[i][1], billing[i][2], billing[i][3]);
+				
+            }
+        });
+
+        function addBill() {
+			
+            addRow($("#billNum").val(), $("#billDate").val(),  $("#billAmt").val(),  $("#file").val());
+			$("#billNum").val("");
+            $("#billDate").val("");
+			$("#billAmt").val("");
+			$("#file").val("");
+
+        };
+
+        function addRow(billNum, billDate, billAmt, file) {
+			
+            //Get the reference of the Table's TBODY element.
+            var tBody = $("#tblBill > TBODY")[0];
+
+            //Add Row.
+            row = tBody.insertRow(-1);
+
+            //Add cell.
+            var cell = $(row.insertCell(-1));
+            cell.html(billNum);
+
+            //Add  cell.
+            cell = $(row.insertCell(-1));
+            cell.html(billDate);
+			var cell = $(row.insertCell(-1));
+            cell.html(billAmt);
+			var cell = $(row.insertCell(-1));
+            cell.html(file);
+
+            //Add Button cell.
+            cell = $(row.insertCell(-1));
+            var btnRemove = $("<input />");
+            btnRemove.attr("type", "button");
+            btnRemove.attr("onclick", "Remove(this);");
+            btnRemove.val("Remove");
+            cell.append(btnRemove);
+        };
+
+        function Remove(button) {
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            var name = $("TD", row).eq(0).html();
+            if (confirm("Do you want to delete: " + name)) {
+
+                //Get the reference of the Table.
+                var table = $("#tblBill")[0];
+
+                //Delete the Table row using it's Index.
+                table.deleteRow(row[0].rowIndex);
+            }
+        };
+    </script>
+	<div class="container-scroller">
+		<!-- partial:partials/_navbar.html -->
+		<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+			<div class="navbar-brand-wrapper d-flex justify-content-center">
+				<div
+					class="navbar-brand-inner-wrapper d-flex justify-content-between align-items-center w-100">
+					<a class="navbar-brand brand-logo" href="index.html"> <img
+						src="images/logo.svg" alt="logo" width="20" height="30" /></a> <a
+						class="navbar-brand brand-logo-mini" href="index.html"> <img
+						src="images/logo-mini.svg" alt="logo" /></a>
+					<button class="navbar-toggler navbar-toggler align-self-center"
+						type="button" data-toggle="minimize">
+						<span class="mdi mdi-sort-variant"></span>
+					</button>
+				</div>
+			</div>
+			<div
+				class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+				<ul class="navbar-nav mr-lg-4 w-100">
+					<li class="nav-item nav-search d-none d-lg-block w-100">
+						<div class="input-group">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="search"> <i
+									class="mdi mdi-magnify"></i>
+								</span>
+							</div>
+							<input type="text" class="form-control" placeholder="Search now"
+								aria-label="search" aria-describedby="search">
+						</div>
+					</li>
+				</ul>
+				<ul class="navbar-nav navbar-nav-right">
+					<li class="nav-item dropdown mr-1"><a
+						class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center"
+						id="messageDropdown" href="#" data-toggle="dropdown"> <i
+							class="mdi mdi-message-text mx-0"></i> <span class="count"></span>
+					</a>
+						<div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+							aria-labelledby="messageDropdown">
+							<p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p>
+							<a class="dropdown-item">
+								<div class="item-thumbnail">
+									<img src="images/face4.jpg" alt="image" class="profile-pic">
+								</div>
+								<div class="item-content flex-grow">
+									<h6 class="ellipsis font-weight-normal">David Grey</h6>
+									<p class="font-weight-light small-text text-muted mb-0">
+										The meeting is cancelled</p>
+								</div>
+							</a> <a class="dropdown-item">
+								<div class="item-thumbnail">
+									<img src="images/face2.jpg" alt="image" class="profile-pic">
+								</div>
+								<div class="item-content flex-grow">
+									<h6 class="ellipsis font-weight-normal">Tim Cook</h6>
+									<p class="font-weight-light small-text text-muted mb-0">
+										New product launch</p>
+								</div>
+							</a> <a class="dropdown-item">
+								<div class="item-thumbnail">
+									<img src="images/face3.jpg" alt="image" class="profile-pic">
+								</div>
+								<div class="item-content flex-grow">
+									<h6 class="ellipsis font-weight-normal">Johnson</h6>
+									<p class="font-weight-light small-text text-muted mb-0">
+										Upcoming board meeting</p>
+								</div>
+							</a>
+						</div></li>
+					<li class="nav-item dropdown mr-4"><a
+						class="nav-link count-indicator dropdown-toggle d-flex align-items-center justify-content-center notification-dropdown"
+						id="notificationDropdown" href="#" data-toggle="dropdown"> <i
+							class="mdi mdi-bell mx-0"></i> <span class="count"></span>
+					</a>
+						<div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+							aria-labelledby="notificationDropdown">
+							<p class="mb-0 font-weight-normal float-left dropdown-header">Notifications</p>
+							<a class="dropdown-item">
+								<div class="item-thumbnail">
+									<div class="item-icon bg-success">
+										<i class="mdi mdi-information mx-0"></i>
+									</div>
+								</div>
+								<div class="item-content">
+									<h6 class="font-weight-normal">Application Error</h6>
+									<p class="font-weight-light small-text mb-0 text-muted">
+										Just now</p>
+								</div>
+							</a> <a class="dropdown-item">
+								<div class="item-thumbnail">
+									<div class="item-icon bg-warning">
+										<i class="mdi mdi-settings mx-0"></i>
+									</div>
+								</div>
+								<div class="item-content">
+									<h6 class="font-weight-normal">Settings</h6>
+									<p class="font-weight-light small-text mb-0 text-muted">
+										Private message</p>
+								</div>
+							</a> <a class="dropdown-item">
+								<div class="item-thumbnail">
+									<div class="item-icon bg-info">
+										<i class="mdi mdi-account-box mx-0"></i>
+									</div>
+								</div>
+								<div class="item-content">
+									<h6 class="font-weight-normal">New user registration</h6>
+									<p class="font-weight-light small-text mb-0 text-muted">2
+										days ago</p>
+								</div>
+							</a>
+						</div></li>
+					<li class="nav-item nav-profile dropdown"><a
+						class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
+						id="profileDropdown"> <img src="images/ashu.jpg" alt="profile" />
+							<span class="nav-profile-name">ASHU ADITYA</span>
+					</a>
+						<div class="dropdown-menu dropdown-menu-right navbar-dropdown"
+							aria-labelledby="profileDropdown">
+							<a class="dropdown-item"> <i
+								class="mdi mdi-settings text-primary"></i> Settings
+							</a> <a class="dropdown-item"> <i
+								class="mdi mdi-logout text-primary"></i> Logout
+							</a>
+						</div></li>
+				</ul>
+				<button
+					class="navbar-toggler navbar-toggler-right d-lg-none align-self-center"
+					type="button" data-toggle="offcanvas">
+					<span class="mdi mdi-menu"></span>
+				</button>
+			</div>
+		</nav>
+		<!-- partial -->
+		<div class="container-fluid page-body-wrapper">
+			<!-- partial:partials/_sidebar.html -->
+			<nav class="sidebar sidebar-offcanvas" id="sidebar">
+				<ul class="nav">
+					<li class="nav-item"><a class="nav-link"
+						href="file:///C:/Users/Administrator/Desktop/MPR/NICSI_app/admin/index.html">
+							<i class="mdi mdi-home menu-icon"></i> <span class="menu-title"><b>Dashboard</b></span>
+					</a></li>
+					<li class="nav-item">
+					<a class="nav-link" data-toggle="collapse" href="#ui-basic1" aria-expanded="false" aria-controls="ui-basic1"> 
+						<i class="mdi mdi-account menu-icon"></i> <span class="menu-title"><b>User	Management</b></span> <i class="menu-arrow"></i>
+					</a>
+						<div class="collapse" id="ui-basic1">
+							<ul class="nav flex-column sub-menu">
+								<li class="nav-item"><a class="nav-link"
+									href="pages/forms/adduser.html">Add User</a></li>
+								<li class="nav-item"><a class="nav-link" href="#">Edit
+										User</a></li>
+								<li class="nav-item"><a class="nav-link" href="#">Delete
+										User</a></li>
+								<li class="nav-item"><a class="nav-link" href="#">List
+										User</a></li>
+							</ul>
+						</div></li>
+
+					<li class="nav-item"><a class="nav-link"
+						data-toggle="collapse" href="#auth1" aria-expanded="false"
+						aria-controls="auth1"> <i class="mdi mdi-cloud menu-icon"></i>
+							<span class="menu-title"><b>Cloud</b></span> <i class="menu-arrow"></i>
+					</a>
+						<div class="collapse" id="auth1">
+							<ul class="nav flex-column sub-menu">
+								<li class="nav-item"><a class="nav-link" href="#"> Add</a></li>
+								<li class="nav-item"><a class="nav-link" href="#"> Edit</a></li>
+								<li class="nav-item"><a class="nav-link" href="#">
+										Delete </a></li>
+								<li class="nav-item"><a class="nav-link" href="#"> List
+								</a></li>
+
+							</ul>
+						</div></li>
+					<li class="nav-item"><a class="nav-link"
+						data-toggle="collapse" href="#auth" aria-expanded="false"
+						aria-controls="auth"> <i class="mdi mdi-fridge menu-icon"></i>
+							<span class="menu-title"><b>Co-location</b></span> <i class="menu-arrow"></i>
+					</a>
+						<div class="collapse" id="auth">
+							<ul class="nav flex-column sub-menu">
+								<li class="nav-item"><a class="nav-link" href="#"> Add</a></li>
+								<li class="nav-item"><a class="nav-link" href="#"> Edit</a></li>
+								<li class="nav-item"><a class="nav-link" href="#">
+										Delete </a></li>
+								<li class="nav-item"><a class="nav-link" href="#"> List
+								</a></li>
+							</ul>
+						</div></li>
+					<li class="nav-item"><a class="nav-link"
+						data-toggle="collapse" href="#ui-basic" aria-expanded="false"
+						aria-controls="ui-basic"> <i
+							class="mdi mdi-circle-outline menu-icon"></i> <span
+							class="menu-title"><b>SDC</b></span> <i class="menu-arrow"></i>
+					</a>
+						<div class="collapse" id="ui-basic">
+							<ul class="nav flex-column sub-menu">
+								<li class="nav-item"><a class="nav-link" href="#">Add</a></li>
+								<li class="nav-item"><a class="nav-link" href="#">Edit</a></li>
+								<li class="nav-item"><a class="nav-link" href="#">Delete</a></li>
+								<li class="nav-item"><a class="nav-link" href="#">List</a></li>
+							</ul>
+						</div></li>
+				</ul>
+			</nav>
+			<!-- partial -->
+
+			<div class="main-panel">
+				<div class="content-wrapper">
+					<div class="row">
+						<div class="col-12 grid-margin">
+							<div class="card">
+								<div class="card-body">
+								<label><center>Cloud Management Portal</center></label>
+									<h4 class="card-title">Cloud Management Portal</h4><hr color="#0073b7" style=" height: 1px;>
+									<form class="form-sample">
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group row">
+													<label><b>Project Details</b></label>
+													<input type="text"
+														class="form-control" placeholder="Enter Project Number"
+														style="width: 480px;" /> <br>
+													
+													<br> <input type="text" class="form-control"
+														placeholder="Enter Project Name" style="width: 480px;" /><br>
+													
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="form-group row">
+
+
+													<select class="form-control" multiple style="width: 480px;">
+														<option "">--Hold CTRL To Select Multiple Location--</option>
+														<option>Bhubaneswar</option>
+														<option>Delhi-Laxmi Nagar</option>
+														<option>Delhi-Shastri Park</option>
+														<option>Hyderabad</option>
+													</select> <br>
+													
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group row">
+
+													<input type="text" class="form-control"
+														placeholder="Enter Cloud Account Number"
+														style="width: 480px;" />
+												</div>
+											</div>
+										
+											<div class="col-md-6">
+												<div class="form-group row">
+
+													<select class="form-control" style="width: 480px;">
+														<option>-Select Project Status-</option>
+														<option>Active</option>
+														<option>Closed</option>
+														<option>Free</option>
+
+													</select>
+
+												</div>
+											</div>
+										</div>
+
+										<hr color="#0073b7" style=" height: 1px;">
+										<label><b>PI Details</b></label>
+										<div class="row">
+											<div class="col-md-6">
+												<div class="form-group row">
+													<select id="financialYear" class="form-control" style="width: 480px;">
+														<option value="N">Select Finiancial Year</option>
+														<option value="Y">2018-2019</option>
+														<option value="Y">2017-2018</option>
+														<option value="Y">2016-2017</option>
+														<option value="Y">2015-2017</option>
+													</select>
+												</div>
+												</div>
+
+													<div id="dvFinancialYear" style="display: none">
+													<label><b>PI Details</b></label>
+													<td><input type="button" onclick="addRow('dataTable')" value="Add" class="btn btn-primary" /></td>
+		<td><INPUT type="button" value="Delete" onclick="deleteRow('dataTable')" class="btn btn-danger" /></td>
+
+<br>
+		<label><b>Bill Details</b></label>
+		
+			<table id="dataTable" cellpadding="10" cellspacing="2" border="2">
+				<thead>
+					<tr>
+						<th>Sr. Number</th>
+						<th>Bill Number</th>
+						<th>Bill Date</th>
+						<th>Bill Amount</th>
+						<th>Upload</th>
+						
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td><INPUT type="checkbox" name="chk"/></td>
+					    <td>
+							<input type="text"
+							name="operationParameterses[0].billNumber"  />
+						</td>
+						 <td>
+							<input type="date" id="billDate"
+							name="operationParameterses[0].billDate"  />
+						</td>
+						<td>
+							<input type="text" id="billAmt"
+							name="operationParameterses[0].billAmt"  />
+						</td>
+						<td>
+							<input type="file" id="file"
+							name="operationParameterses[0].file" />
+						</td>
+
+					</tr>
+				</tfoot>
+			</table>
+														
+											</div>
+											
+													
+												
+											</div>
+										
+										
+											<hr color="#0073b7" style=" height: 1px;">
+											<label><b>Bill Details</b></label>
+											<div class="row">
+												<table id="tblBill" cellpadding="0" cellspacing="0" border="1">
+													<thead>
+														<tr>
+															<th>Bill Number</th>
+															<th>Bill Date</th>
+															<th>Bill Amount</th>
+															<th>Upload</th>
+														</tr>
+													</thead>
+													<tbody>
+													</tbody>
+													<tfoot>
+														<tr>
+															<td><input type="text" id="billNum" class="form-control" required/></td>
+															<td><input type="date" id="billDate" class="form-control"/></td>
+															<td><input type="text" id="billAmt" class="form-control"/></td>
+															<td><input type="file" id="file" class="form-control"/></td>
+															<td><input type="button" onclick="addBill()" value="Add" class="form-control" class="btn btn-primary"/></td>
+														</tr>
+													</tfoot>
+												</table>
+											</div>
+											
+											<hr color="#0073b7" style=" height: 1px;">
+												<div class="col-md-6">
+													<div class="form-group row">
+
+														<div class="col-sm-9">
+														<div class="form-group">
+														  <label for="comment">Remarks:</label>
+														  <textarea class="form-control" rows="3" id="comment" placeholder="Any Remarks?"></textarea>
+														</div>
+															
+														</div>
+													</div>
+												</div>
+
+												<div class="input-group">
+ 
+												<div class="col-md-6">
+													<div class="form-group row">
+
+														<div class="col-sm-9">
+															<button type="submit" class="btn btn-primary mr-2"
+																class="form-control">Save</button>
+														</div>
+													</div>
+												</div>
+											</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- main-panel ends -->
+		</div>
+		<!-- page-body-wrapper ends -->
+	</div>
+	<!-- container-scroller -->
+	<!-- plugins:js -->
+	<script src="js/vendor.bundle.base.js"></script>
+	<!-- endinject -->
+	<!-- inject:js -->
+	<script src="js/off-canvas.js"></script>
+	<script src="js/hoverable-collapse.js"></script>
+	<script src="js/template.js"></script>
+	<!-- endinject -->
+	<!-- Custom js for this page-->
+	<script src="js/file-upload.js"></script>
+	<!-- End custom js for this page-->
+</body>
+
+</html>

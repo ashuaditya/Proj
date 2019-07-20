@@ -1,0 +1,29 @@
+#Connection Details 
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test
+    username: root
+    password: adityakarn
+    
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialct: org.hibernate.dialect.MySQL5Dialect
+## WEB MVC ##
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+## size=?? ##
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+## SERVER ##
+server:
+  port: 7070
+#server.servlet.context-path=/myapp
